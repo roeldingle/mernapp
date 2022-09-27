@@ -1,10 +1,22 @@
 import React from 'react'
-import {FaSignInAlt, FaSignOutAlt } from'react-icons/fa';
+import {logout, resetRegister} from '../features/auth/authSlice';
+import {useSelector, useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 
+import {FaSignInAlt, FaSignOutAlt } from'react-icons/fa';
 import {Link} from 'react-router-dom'
 
 
 function Header(props) {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+  const logOut = () => {
+    dispatch(logout())
+    dispatch(resetRegister())
+    navigate('/admin/login')
+  }
   return (
     <>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -27,14 +39,18 @@ function Header(props) {
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li>
-                        <Link to='/admin/me' className="dropdown-item"> View Profile</Link>
+                        <Link to='/admin/me' className="dropdown-item"> 
+                            View Profile
+                        </Link>
                     </li>
                     <li>
-                    <Link to='/admin/changepassword' className="dropdown-item"> Change Password</Link>
+                        <Link to='/admin/changepassword' className="dropdown-item"> 
+                        Change Password
+                        </Link>
                     </li>
                     <li>
-                        <button className="btn dropdown-item">
-                            Logout
+                        <button className="btn dropdown-item" onClick={logOut}>
+                            <FaSignOutAlt /> Logout
                         </button>
                     </li>
                 </ul>
@@ -53,8 +69,8 @@ function Header(props) {
                     <Link to='/admin/changepassword' className="dropdown-item"> Change Password</Link>
                     </li>
                     <li>
-                        <button className="btn dropdown-item">
-                            Logout
+                        <button className="btn dropdown-item" onClick={logOut}>
+                            <FaSignOutAlt /> Logout
                         </button>
                     </li>
                 </ul>

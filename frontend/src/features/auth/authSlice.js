@@ -10,6 +10,7 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
+    isRegister: false,
     message: '',
 }
 
@@ -43,6 +44,13 @@ export const register = createAsyncThunk('auth/register',
     }
 )
 
+//Logout
+export const logout = createAsyncThunk('auth/logout', 
+    async()=>{
+        await authService.logout()
+    }
+)
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -51,14 +59,16 @@ export const authSlice = createSlice({
             state.isError = false
             state.isSuccess = false
             state.isLoading = false
+            state.isRegister = false
             state.message = ''
         },
         resetRegister: (state) => {
             state.isError = false
+            state.isSuccess = false
             state.isLoading = false
             state.message = ''
             state.user = null
-        },
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -68,11 +78,13 @@ export const authSlice = createSlice({
         .addCase(register.fulfilled, (state, action)=> {
             state.isLoading = false
             state.isSuccess = true
+            state.isRegister = true
             //state.user = action.payload
         })
         .addCase(register.rejected, (state, action)=> {
             state.isLoading = false
             state.isError = true
+            state.isRegister = false
             state.message = action.payload
             state.user = null
         })
@@ -88,6 +100,10 @@ export const authSlice = createSlice({
             state.isLoading = false
             state.isError = true
             state.message = action.payload
+            state.user = null
+        })
+        .addCase(logout.fulfilled, (state)=> {
+            state.user = null
         })
     }
 })

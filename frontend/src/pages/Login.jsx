@@ -23,20 +23,22 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth);
+  const {user, isLoading, isError, isSuccess, isRegister, message} = useSelector((state) => state.auth);
 
   useEffect(() => {
       if(isError){
           toast.error(message);
       }
 
-      if(isSuccess || user){
+      if(isSuccess|| user){
           navigate('/admin/');
       }
 
      dispatch(reset());
 
-  }, [ navigate, dispatch])
+  }, [ user, isError, isSuccess, isRegister, message, navigate, dispatch])
+
+
 
   const onChange = (e) => {
       setFormData((prevState) => ({
@@ -66,7 +68,7 @@ function Login() {
       <div className="row">
       <div className="col-6">
         {
-          isSuccess ? 
+          isRegister ? 
           (
             <>
             <h1>Your registration has been received</h1>
