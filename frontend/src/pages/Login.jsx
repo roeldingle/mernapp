@@ -7,6 +7,7 @@ import {login, reset} from '../features/auth/authSlice';
 import Spinner from '../components/Spinner';
 import {toast} from 'react-toastify';
 import {FaSignInAlt} from 'react-icons/fa'
+import {Link} from 'react-router-dom'
 
 function Login() {
 
@@ -30,7 +31,7 @@ function Login() {
           toast.error(message);
       }
 
-      if(isSuccess|| user){
+      if(isSuccess || user){
           navigate('/admin/');
       }
 
@@ -105,7 +106,10 @@ function Login() {
               value={password}
               />
             </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
+            <div className="mb-3">
+            <Link to='/admin/register' className="nav-link">Don't have an account yet?</Link>
+            </div>
+            <button type="submit" className="btn btn-primary float-end">Submit</button>
           </form>
         </div>
       </div>

@@ -7,6 +7,7 @@ import {register, resetRegister} from '../features/auth/authSlice';
 import Spinner from '../components/Spinner';
 import {toast} from 'react-toastify';
 import {FaUser} from 'react-icons/fa';
+import {Link} from 'react-router-dom'
 
 function Register() {
 
@@ -31,18 +32,25 @@ function Register() {
 
   const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //     if(isError){
-  //         toast.error(message);
-  //     }
+  useEffect(() => {
+      if(isError){
+          toast.error(message);
+      }
 
-  //     if(isSuccess|| user){
-  //         navigate('/admin/');
-  //     }
+      if(isSuccess){
+        toast.success('Registered successfully!\r\n Admin will notify you as soon as account is activated.');
+        setFormData({
+          firstname: '',
+          lastname: '',
+          email: '',
+          password: '',
+          password2: '',
+        })
+      }
 
-  //    dispatch(resetRegister());
+     dispatch(resetRegister());
 
-  // }, [ user, isError, isSuccess, message, navigate, dispatch]);
+  }, [ user, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {
       setFormData((prevState) => ({
@@ -140,7 +148,8 @@ function Register() {
               value={password2}
               />
             </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
+            <Link to='/admin/login' className="nav-link">Already have an account?</Link>
+            <button type="submit" className="btn btn-primary float-end">Submit</button>
           </form>
         </div>
       </div>

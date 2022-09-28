@@ -1,16 +1,23 @@
 import React from 'react'
 import {logout, resetRegister} from '../features/auth/authSlice';
-import {useSelector, useDispatch} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 
 import {FaSignInAlt, FaSignOutAlt } from'react-icons/fa';
 import {Link} from 'react-router-dom'
 
 
-function Header(props) {
+function Header() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    const {user} = useSelector((state) => state.auth);
+
+    if(!user){
+        return false;
+    }
 
   const logOut = () => {
     dispatch(logout())
@@ -59,7 +66,7 @@ function Header(props) {
             </div>
             <div className="nav-item dropdown d-none d-lg-block">
                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    {props.user.firstname +' '+ props.user.lastname }
+                    {user.firstname +' '+ user.lastname }
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li>

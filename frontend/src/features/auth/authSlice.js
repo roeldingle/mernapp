@@ -1,5 +1,4 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import { ErrorResponse } from '@remix-run/router'
 import authService from './authService'
 
 //Get user from local storage
