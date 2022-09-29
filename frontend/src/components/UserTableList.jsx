@@ -17,7 +17,7 @@ function UserTableList(props) {
               ))
 
           ) 
-          : (<h3>No items to show</h3>)
+          : (<><tr><td>No items to show</td></tr></>)
       }
     </>
   )

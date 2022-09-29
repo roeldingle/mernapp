@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 
 import Users from './pages/Users';
+import UserAdd from './pages/UserAdd';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/admin/register" element={<Register />}/>
 
           <Route path="/admin/users" element={<Users />}/>
+          <Route path="/admin/users/add" element={<UserAdd />}/>
         </Routes>
       </div>
     </Router>

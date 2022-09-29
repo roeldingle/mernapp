@@ -12,6 +12,21 @@ const initialState = {
     message: '',
 }
 
+//Add
+export const addUser = createAsyncThunk('users/add', 
+    async(userData, thunkAPI)=>{
+        try{
+            const token = thunkAPI.getState().auth.user.token;
+            return await usersService.add(userData,token)
+        }catch(error){
+            const message = (error.response && error.response.data 
+                && error.response.data.message) || error.message || error.toString()
+
+                return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
 //Get all users
 export const getall = createAsyncThunk('users/getall', 
     async(_, thunkAPI) => {
@@ -19,7 +34,6 @@ export const getall = createAsyncThunk('users/getall',
             const token = thunkAPI.getState().auth.user.token;
             return await usersService.getall(token)
         }catch(error){
-            console.log(error)
             const message = (error.response && error.response.data 
                 && error.response.data.message) || error.message || error.toString()
                 return thunkAPI.rejectWithValue(message)
@@ -45,6 +59,21 @@ export const usersSlice = createSlice({
             state.users = action.payload
         })
         .addCase(getall.rejected, (state, action)=> {
+            state.isLoading = false
+            state.isError = true
+            state.message = action.payload
+            state.users = null
+        })
+        .addCase(addUser.pending, (state)=> {
+            state.isLoading = true
+        })
+        .addCase(addUser.fulfilled, (state, action)=> {
+            state.isLoading = false
+            state.isSuccess = true
+            state.message = "User created succesfully!"
+            state.users.push(action.payload)
+        })
+        .addCase(addUser.rejected, (state, action)=> {
             state.isLoading = false
             state.isError = true
             state.message = action.payload
