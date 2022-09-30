@@ -3,6 +3,7 @@ const router = express.Router()
 const {protect} = require('../middleware/authMiddleware')
 
 const { 
+    getUser,
     getUsers,
     createUser,
     updateUser,
@@ -11,5 +12,8 @@ const {
 
 router.route('/').get(protect, getUsers).post(protect, createUser)
 router.route('/:id').put(protect, updateUser).delete(protect, deleteUser)
+
+router.get('/:id', protect, getUser)
+
 
 module.exports = router

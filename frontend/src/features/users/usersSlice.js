@@ -12,16 +12,30 @@ const initialState = {
     message: '',
 }
 
-//Delete
-export const deleteUser = createAsyncThunk('users/deleteUser', 
-    async(userId, thunkAPI)=>{
+//Get a users
+export const getUser = createAsyncThunk('users/getuser', 
+    async(userId, thunkAPI) => {
         try{
             const token = thunkAPI.getState().auth.user.token;
-            return await usersService.deleteUser(userId,token)
+            return await usersService.getUser(userId,token)
         }catch(error){
             const message = (error.response && error.response.data 
                 && error.response.data.message) || error.message || error.toString()
+                return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
 
+
+//Get all users
+export const getAll = createAsyncThunk('users/getall', 
+    async(_, thunkAPI) => {
+        try{
+            const token = thunkAPI.getState().auth.user.token;
+            return await usersService.getAll(token)
+        }catch(error){
+            const message = (error.response && error.response.data 
+                && error.response.data.message) || error.message || error.toString()
                 return thunkAPI.rejectWithValue(message)
         }
     }
@@ -41,20 +55,21 @@ export const addUser = createAsyncThunk('users/addUser',
         }
     }
 )
-
-//Get all users
-export const getAll = createAsyncThunk('users/getall', 
-    async(_, thunkAPI) => {
+//Delete
+export const deleteUser = createAsyncThunk('users/deleteUser', 
+    async(userId, thunkAPI)=>{
         try{
             const token = thunkAPI.getState().auth.user.token;
-            return await usersService.getAll(token)
+            return await usersService.deleteUser(userId,token)
         }catch(error){
             const message = (error.response && error.response.data 
                 && error.response.data.message) || error.message || error.toString()
+
                 return thunkAPI.rejectWithValue(message)
         }
     }
 )
+
 
 
 export const usersSlice = createSlice({
@@ -73,6 +88,19 @@ export const usersSlice = createSlice({
             state.users = action.payload
         })
         .addCase(getAll.rejected, (state, action)=> {
+            state.isLoading = false
+            state.isError = true
+            state.message = action.payload
+            state.users = null
+        })
+        .addCase(getUser.pending, (state)=> {
+            state.isLoading = true
+        })
+        .addCase(getUser.fulfilled, (state, action)=> {
+            state.isLoading = false
+            state.users = action.payload
+        })
+        .addCase(getUser.rejected, (state, action)=> {
             state.isLoading = false
             state.isError = true
             state.message = action.payload

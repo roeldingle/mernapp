@@ -6,6 +6,14 @@ const User = require('../models/userModels')
 
 let token
 
+//@desc Get a user
+//@route GET/api/user/:id
+//@access Private
+const getUser = asyncHandler(async(req,res) => {
+    const user = await User.findById(req.params.id)
+    res.status(200).json({data: user})
+})
+
 //@desc Get all users
 //@route GET/api/users
 //@access Private
@@ -118,6 +126,7 @@ const generateToken = (id) => {
 }
 
 module.exports = {
+    getUser,
     getUsers,
     createUser,
     updateUser,

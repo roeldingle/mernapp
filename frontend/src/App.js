@@ -6,8 +6,9 @@ import Dashboard from './pages/Dashboard';
 import Register from './pages/Register';
 import Login from './pages/Login';
 
-import Users from './pages/Users';
-import UserAdd from './pages/UserAdd';
+import Users from './pages/users/Users';
+import UserAdd from './pages/users/UserAdd';
+import UserEdit from './pages/users/UserEdit';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
 
           <Route path="/admin/users" element={<Users />}/>
           <Route path="/admin/users/add" element={<UserAdd />}/>
+          <Route path="/admin/users/edit" element={<UserEdit />}/>
         </Routes>
       </div>
     </Router>

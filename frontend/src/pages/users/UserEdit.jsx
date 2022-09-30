@@ -1,31 +1,18 @@
 import React from 'react'
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useLayoutEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {addUser, reset} from '../features/users/usersSlice';
+import { reset} from '../../features/users/usersSlice';
 
-import Spinner from '../components/Spinner';
-import Header from '../components/Header';
-import Breadcrumbs from '../components/Breadcrumbs';
+import Spinner from '../../components/Spinner';
+import Header from '../../components/Header';
+import Breadcrumbs from '../../components/Breadcrumbs';
 import {toast} from 'react-toastify';
 
-function Users() {
+function UserEdit() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  /*declare form variables*/
-  const initFormData = {
-      role: 'member',
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-  };
-  /*set form data to state*/
-  const [formData, setFormData] = useState(initFormData);
-  //destructure
-  const {role,firstname,lastname,email, password} = formData;
 
   /*get users data from redux store*/
   const {
@@ -36,23 +23,37 @@ function Users() {
     message
   } = useSelector((state) => state.users);
 
+  /*notify on first load*/
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  /*declare form variables*/
+  const initFormData = {
+      role: 'member',
+      firstname: '',
+      lastname: '',
+      email: '',
+  };
+  /*set form data to state*/
+  const [formData, setFormData] = useState(initFormData);
+  //destructure
+  const {role,firstname,lastname,email} = formData;
+
+
   const onSubmit = (e) => {
         e.preventDefault();
 
         if(
             firstname.trim().length > 1 &&
             lastname.trim().length > 1 &&
-            email.trim().length > 1 &&
-            password.trim().length > 1
+            email.trim().length > 1 
         ){
             const userData = {
                 role,
                 firstname,
                 lastname,
                 email,
-                password,
             }
-            dispatch(addUser(userData));
+            //dispatch(addUser(userData));
             setFormData(initFormData);
         }else{
             toast.error('Please complete all fields');
@@ -61,6 +62,7 @@ function Users() {
 
   /*form input change handler*/
   const onChange = (e) => {
+        setFirstLoad(false)
       setFormData((prevState) => ({
           ...prevState,
           [e.target.name] : e.target.value
@@ -74,11 +76,12 @@ function Users() {
         toast.error(message);
     }
 
+
     if(isSuccess){
         toast.success('User succesfully added');
     }
 
-    dispatch(reset());
+    //dispatch(reset());
     
   }, [isSuccess, isError, message, navigate])
 
@@ -91,7 +94,7 @@ function Users() {
   return (
     <>
       <Header />
-      <Breadcrumbs page='Add user' items={['Users','Add user']} back={() => navigate('/admin/users')} />
+      <Breadcrumbs page='Edit user' items={['Users','Edit user']} back={() => navigate('/admin/users')} />
       <div className="container mt-4">
       <div className="mb-4">
               <button className="btn btn-primary btn-sm" onClick={() => navigate('/admin/users')}>Back to Users</button>
@@ -102,19 +105,10 @@ function Users() {
                   <form className="p-2">
                   <div className="mb-3 mt-3">
                     <label className="form-label">User role</label>
-                    <select className="form-control" name="role" id="role" onChange={onChange} >
-                        <option value="admin" selected={formData.role === 'admin' ? true : false}>Admin</option>
-                        <option value="member" selected={formData.role === 'member' ? true : false}>Member</option>
+                    <select className="form-control" name="role" id="role" value={firstLoad ? users.role : role} onChange={onChange} >
+                        <option value="admin">Admin</option>
+                        <option value="member">Member</option>
                     </select>
-                    {/* <input 
-                    type="text" 
-                    name="role" 
-                    className="form-control" 
-                    id="role"
-                    placeholder="Enter role"
-                    value={formData.role}
-                    onChange={onChange}
-                    /> */}
                     </div>
                     <div className="mb-3 mt-3">
                     <label className="form-label">First name</label>
@@ -124,7 +118,7 @@ function Users() {
                     className="form-control" 
                     id="firstname"
                     placeholder="Enter first name"
-                    value={formData.firstname}
+                    value={firstname === '' ? users.firstname : firstname}
                     onChange={onChange}
                     />
                     </div>
@@ -137,7 +131,7 @@ function Users() {
                       id="lastname"
                       placeholder="Enter last name"
                       onChange={onChange}
-                      value={formData.lastname}
+                      value={lastname === '' ? users.lastname : lastname}
                       />
                     </div>
                     <div className="mb-3 mt-3">
@@ -147,21 +141,9 @@ function Users() {
                       name="email" 
                       className="form-control" 
                       id="email"
-                      placeholder="Enter email"
+                      placeholder="Please input email"
                       onChange={onChange}
-                      value={formData.email}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Password</label>
-                      <input 
-                      type="password" 
-                      name="password" 
-                      className="form-control" 
-                      id="password"
-                      placeholder="Enter password"
-                      onChange={onChange}
-                      value={formData.password}
+                      value={email === '' ? users.email : email}
                       />
                     </div>
                     <button type="submit" className="btn btn-primary float-end">Submit</button>
@@ -174,4 +156,4 @@ function Users() {
   )
 }
 
-export default Users
+export default UserEdit

@@ -2,11 +2,11 @@
   import {useEffect} from 'react';
   import {useNavigate} from 'react-router-dom';
   import {useSelector, useDispatch} from 'react-redux';
-  import {getAll, deleteUser, reset} from '../features/users/usersSlice';
+  import {getAll, getUser, deleteUser, reset} from '../../features/users/usersSlice';
 
-  import Spinner from '../components/Spinner';
-  import Header from '../components/Header';
-  import Breadcrumbs from '../components/Breadcrumbs';
+  import Spinner from '../../components/Spinner';
+  import Header from '../../components/Header';
+  import Breadcrumbs from '../../components/Breadcrumbs';
   import {FaPenAlt, FaTrashAlt } from'react-icons/fa';
 
   import {toast} from 'react-toastify';
@@ -24,6 +24,12 @@
       isSuccess, 
       message
     } = useSelector((state) => state.users);
+    
+    /*handle editClick*/
+    const handleOnEditClick = (id) => {
+      dispatch(getUser(id))
+      navigate("/admin/users/edit")
+    }
 
     /*get auth data*/
     const {user} = useSelector((state) => state.auth);
@@ -45,9 +51,9 @@
       /*init users data*/
       dispatch(getAll());
       /*prevent loop || trigger once*/
-       return () => {
-        dispatch(reset());
-       }
+      //  return () => {
+      //   dispatch(reset());
+      //  }
 
     }, [user, isError, isSuccess, message, navigate, dispatch]);
 
@@ -93,7 +99,7 @@
                                   <td>{item.role}</td>
                                   <td>{item.active ? 'Active' : 'Inactive'}</td>
                                   <td>
-                                    <button className="btn btn-warning btn-sm" title="Edit"><FaPenAlt /></button>&nbsp;
+                                    <button className="btn btn-warning btn-sm" title="Edit" onClick={() => handleOnEditClick(item._id)}><FaPenAlt /></button>&nbsp;
                                     <button disabled={user._id === item._id ? true : false} className="btn btn-danger btn-sm" title="Delete" onClick={() => dispatch(deleteUser(item._id))}><FaTrashAlt /></button>
                                   </td>
                               </tr>
