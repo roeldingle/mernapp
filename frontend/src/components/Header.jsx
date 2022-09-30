@@ -1,4 +1,5 @@
 import React from 'react'
+import {useEffect} from 'react';
 import {logout, resetRegister} from '../features/auth/authSlice';
 import { useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
@@ -13,11 +14,8 @@ function Header() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    /*get auth data*/
     const {user} = useSelector((state) => state.auth);
-
-    if(!user){
-        return false;
-    }
 
   const logOut = () => {
     dispatch(logout())

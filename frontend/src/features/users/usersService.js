@@ -3,7 +3,21 @@ import axios from 'axios'
 const API_URL = '/api/users/'
 
 //Add user
-const add = async(userData,token) => {
+const deleteUser = async(userId,token) => {
+
+  const config = {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+  }
+
+  const response = await axios.delete(API_URL+ userId, config);
+
+  return response.data.data;
+}
+
+//Add user
+const addUser = async(userData,token) => {
 
   const config = {
       headers: {
@@ -17,7 +31,7 @@ const add = async(userData,token) => {
 }
 
 //Get all users
-const getall = async(token) => {
+const getAll = async(token) => {
 
   const config = {
       headers: {
@@ -32,8 +46,9 @@ const getall = async(token) => {
 
 
 const usersService = {
-  getall,
-  add
+  getAll,
+  addUser,
+  deleteUser
 }
 
 export default usersService

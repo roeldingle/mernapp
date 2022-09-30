@@ -7,15 +7,12 @@ import {addUser, reset} from '../features/users/usersSlice';
 import Spinner from '../components/Spinner';
 import Header from '../components/Header';
 import Breadcrumbs from '../components/Breadcrumbs';
-
 import {toast} from 'react-toastify';
 
 function Users() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  
 
   /*declare form variables*/
   const initFormData = {
@@ -55,18 +52,12 @@ function Users() {
                 email,
                 password,
             }
-           // dispatch(addUser(userData));
-            
             dispatch(addUser(userData));
             setFormData(initFormData);
-            // if(isSuccess){
-            //     toast.success('User succesfully added');
-            // }
         }else{
             toast.error('Please complete all fields');
         }
-    };
-
+  };
 
   /*form input change handler*/
   const onChange = (e) => {
@@ -83,17 +74,13 @@ function Users() {
         toast.error(message);
     }
 
-    return () => {
-        dispatch(reset());
-    }
-
     if(isSuccess){
         toast.success('User succesfully added');
     }
+
+    dispatch(reset());
     
-    
-    
-  }, [isSuccess, isError, message])
+  }, [isSuccess, isError, message, navigate])
 
 
   /*return spinner if status is loading*/
@@ -115,11 +102,11 @@ function Users() {
                   <form className="p-2">
                   <div className="mb-3 mt-3">
                     <label className="form-label">User role</label>
-                    {/* <select className="form-control" name="role" id="role" onChange={onChange} >
+                    <select className="form-control" name="role" id="role" onChange={onChange} >
                         <option value="admin" selected={formData.role === 'admin' ? true : false}>Admin</option>
                         <option value="member" selected={formData.role === 'member' ? true : false}>Member</option>
-                    </select> */}
-                    <input 
+                    </select>
+                    {/* <input 
                     type="text" 
                     name="role" 
                     className="form-control" 
@@ -127,7 +114,7 @@ function Users() {
                     placeholder="Enter role"
                     value={formData.role}
                     onChange={onChange}
-                    />
+                    /> */}
                     </div>
                     <div className="mb-3 mt-3">
                     <label className="form-label">First name</label>

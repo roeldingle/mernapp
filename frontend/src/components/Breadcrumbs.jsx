@@ -7,7 +7,7 @@ function Breadcrumbs(props) {
     <div className="container mt-4">
         <nav aria-label="breadcrumb">
             <ol className="breadcrumb align-items-center">
-                <li class="">
+                <li className="">
                     <h2 className="me-3">{ props.page }
                     </h2>
                 </li>

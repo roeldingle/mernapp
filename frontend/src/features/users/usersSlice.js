@@ -12,12 +12,27 @@ const initialState = {
     message: '',
 }
 
+//Delete
+export const deleteUser = createAsyncThunk('users/deleteUser', 
+    async(userId, thunkAPI)=>{
+        try{
+            const token = thunkAPI.getState().auth.user.token;
+            return await usersService.deleteUser(userId,token)
+        }catch(error){
+            const message = (error.response && error.response.data 
+                && error.response.data.message) || error.message || error.toString()
+
+                return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
 //Add
-export const addUser = createAsyncThunk('users/add', 
+export const addUser = createAsyncThunk('users/addUser', 
     async(userData, thunkAPI)=>{
         try{
             const token = thunkAPI.getState().auth.user.token;
-            return await usersService.add(userData,token)
+            return await usersService.addUser(userData,token)
         }catch(error){
             const message = (error.response && error.response.data 
                 && error.response.data.message) || error.message || error.toString()
@@ -28,11 +43,11 @@ export const addUser = createAsyncThunk('users/add',
 )
 
 //Get all users
-export const getall = createAsyncThunk('users/getall', 
+export const getAll = createAsyncThunk('users/getall', 
     async(_, thunkAPI) => {
         try{
             const token = thunkAPI.getState().auth.user.token;
-            return await usersService.getall(token)
+            return await usersService.getAll(token)
         }catch(error){
             const message = (error.response && error.response.data 
                 && error.response.data.message) || error.message || error.toString()
@@ -50,15 +65,14 @@ export const usersSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(getall.pending, (state)=> {
+        .addCase(getAll.pending, (state)=> {
             state.isLoading = true
         })
-        .addCase(getall.fulfilled, (state, action)=> {
+        .addCase(getAll.fulfilled, (state, action)=> {
             state.isLoading = false
-            state.isSuccess = true
             state.users = action.payload
         })
-        .addCase(getall.rejected, (state, action)=> {
+        .addCase(getAll.rejected, (state, action)=> {
             state.isLoading = false
             state.isError = true
             state.message = action.payload
@@ -74,6 +88,22 @@ export const usersSlice = createSlice({
             state.users.push(action.payload)
         })
         .addCase(addUser.rejected, (state, action)=> {
+            state.isLoading = false
+            state.isError = true
+            state.message = action.payload
+            state.users = null
+        })
+
+        .addCase(deleteUser.pending, (state)=> {
+            state.isLoading = true
+        })
+        .addCase(deleteUser.fulfilled, (state, action)=> {
+            state.isLoading = false
+            state.isSuccess = true
+            //return goals without the deleted goal
+            state.users = state.users.filter((user) => user._id !== action.payload.id)
+        })
+        .addCase(deleteUser.rejected, (state, action)=> {
             state.isLoading = false
             state.isError = true
             state.message = action.payload

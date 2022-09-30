@@ -22,6 +22,11 @@ const loginUser = asyncHandler(async(req,res) => {
     const user = await User.findOne({email})
 
     if(user && (await bcrypt.compare(password, user.password))){
+
+        if(!user.active){
+            res.status(400).json({message: 'Your account is not yet activated'})
+        }
+
         return res.status(200).json({
             _id: user._id,
             firstname: user.firstname, 
@@ -31,8 +36,7 @@ const loginUser = asyncHandler(async(req,res) => {
             token: generateToken(user._id)
         })
     }else{
-        res.status(400)
-        throw new Error('Invalid credentials');
+        res.status(400).json({message: 'Invalid credentials'})
     }
 
 })
@@ -58,7 +62,6 @@ const registerUser = asyncHandler(async(req,res) => {
         || !password
         ){
         res.status(400).json({message: 'Missing field data'})
-        //throw new Error('Missing field data');
     }
 
     //Check duplicate

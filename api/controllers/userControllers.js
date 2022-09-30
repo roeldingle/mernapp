@@ -10,8 +10,8 @@ let token
 //@route GET/api/users
 //@access Private
 const getUsers = asyncHandler(async(req,res) => {
-    const user = await User.find()
-    res.status(200).json({message: 'All user data', data: user})
+    const users = await User.find()
+    res.status(200).json({data: users})
 })
 
 //@desc Create user

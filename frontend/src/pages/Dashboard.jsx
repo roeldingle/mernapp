@@ -10,15 +10,27 @@ function Dashboard() {
   const navigate = useNavigate();
   
   useEffect(() => {
-      if(user === null){
+      if(!user || user == null){
           navigate('/admin/login');
       }
   }, [user, navigate]);
 
   return (
     <>
-    <Header user={user}/>
-    <div>Dashboard</div>
+    {
+      user ? 
+      (
+        <>
+        <Header user={user}/>
+          <div>Dashboard</div>
+        </>
+
+      ) : (
+        <>
+          <div>No user set</div>
+        </>
+      )
+    }
     </>
   )
 }
