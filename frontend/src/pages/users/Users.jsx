@@ -51,9 +51,9 @@
       /*init users data*/
       dispatch(getAll());
       /*prevent loop || trigger once*/
-      //  return () => {
-      //   dispatch(reset());
-      //  }
+       return () => {
+        dispatch(reset());
+       }
 
     }, [user, isError, isSuccess, message, navigate, dispatch]);
 
@@ -72,7 +72,7 @@
           <Breadcrumbs items={[]} page='Users' />
           <div className="container mt-4">
             <div className="mb-4">
-              <button className="btn btn-primary btn-sm" onClick={() => navigate('/admin/users/add')}>Add User</button>
+              <button className="btn btn-dark btn-sm" onClick={() => navigate('/admin/users/add')}>Add User</button>
             </div>
             <div className="row">
               <div className="col-12">
@@ -99,8 +99,8 @@
                                   <td>{item.role}</td>
                                   <td>{item.active ? 'Active' : 'Inactive'}</td>
                                   <td>
-                                    <button className="btn btn-warning btn-sm" title="Edit" onClick={() => handleOnEditClick(item._id)}><FaPenAlt /></button>&nbsp;
-                                    <button disabled={user._id === item._id ? true : false} className="btn btn-danger btn-sm" title="Delete" onClick={() => dispatch(deleteUser(item._id))}><FaTrashAlt /></button>
+                                    <button className="btn btn-secondary btn-sm" title="Edit" onClick={() => handleOnEditClick(item._id)}><FaPenAlt /></button>&nbsp;
+                                    <button disabled={user._id === item._id ? true : false} className="btn btn-secondary btn-sm" title="Delete" onClick={() => dispatch(deleteUser(item._id))}><FaTrashAlt /></button>
                                   </td>
                               </tr>
                           ))

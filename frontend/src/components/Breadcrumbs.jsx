@@ -15,7 +15,7 @@ function Breadcrumbs(props) {
                     props.items.length > 1 ?
                         props.items.map((item,index)=>(
                             index === 0 ? 
-                            (<li className="breadcrumb-item" key={index}><button className="btn btn-link" onClick={props.back}>{item}</button></li>) 
+                            (<li className="breadcrumb-item" key={index}><button className="btn btn-link text-secondary" onClick={props.back}>{item}</button></li>) 
                             : (<li className="breadcrumb-item" key={index}>{item}</li>)
                             
                         ))

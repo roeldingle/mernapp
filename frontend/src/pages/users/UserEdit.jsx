@@ -2,6 +2,8 @@ import React from 'react'
 import {useState, useEffect, useLayoutEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
+
+import {FaLongArrowAltLeft, FaSave} from'react-icons/fa';
 import { reset} from '../../features/users/usersSlice';
 
 import Spinner from '../../components/Spinner';
@@ -32,11 +34,12 @@ function UserEdit() {
       firstname: '',
       lastname: '',
       email: '',
+      active: false
   };
   /*set form data to state*/
   const [formData, setFormData] = useState(initFormData);
   //destructure
-  const {role,firstname,lastname,email} = formData;
+  const {role,firstname,lastname,email,active} = formData;
 
 
   const onSubmit = (e) => {
@@ -62,12 +65,45 @@ function UserEdit() {
 
   /*form input change handler*/
   const onChange = (e) => {
+      
+      if(firstLoad){
+        setFormData({
+          role: users.role,
+          firstname: users.firstname,
+          lastname: users.lastname,
+          email: users.email,
+          active: users.active,
+        });
         setFirstLoad(false)
+      }
+
+      
       setFormData((prevState) => ({
           ...prevState,
           [e.target.name] : e.target.value
       }));
   };
+
+  /*radio btn for activate*/
+  const handleRadioChange = (event) => {
+   
+    if(firstLoad){
+      setFormData({
+        role: users.role,
+        firstname: users.firstname,
+        lastname: users.lastname,
+        email: users.email,
+        active: users.active,
+      });
+      setFirstLoad(false)
+    }
+
+    const isActive = event.target.value === 'true' ? true : false;
+    setFormData((prevState) => ({
+      ...prevState,
+      active : isActive
+  }));
+  }
 
   /*monitor changes and execute code inside*/
   useEffect(() => {
@@ -76,9 +112,8 @@ function UserEdit() {
         toast.error(message);
     }
 
-
     if(isSuccess){
-        toast.success('User succesfully added');
+        toast.success('Edit user succesfully');
     }
 
     //dispatch(reset());
@@ -97,7 +132,7 @@ function UserEdit() {
       <Breadcrumbs page='Edit user' items={['Users','Edit user']} back={() => navigate('/admin/users')} />
       <div className="container mt-4">
       <div className="mb-4">
-              <button className="btn btn-primary btn-sm" onClick={() => navigate('/admin/users')}>Back to Users</button>
+              <button className="btn btn-dark btn-sm" onClick={() => navigate('/admin/users')}><FaLongArrowAltLeft /> Back to Users</button>
             </div>
             <div className="container mt-4">
               <div className="row">
@@ -146,7 +181,37 @@ function UserEdit() {
                       value={email === '' ? users.email : email}
                       />
                     </div>
-                    <button type="submit" className="btn btn-primary float-end">Submit</button>
+                    <div className="btn-group mb-3 mt-3" role="group">
+                      <input type="radio" className="btn-check" name="active" id="btnradio1" autocomplete="off" value="true" 
+                      onChange={handleRadioChange}
+                      checked={
+                        (() => {
+                            if (firstLoad)
+                              return users.active ? 'checked' : ''
+                            else 
+                              return active ? 'checked' : ''
+                        })()
+                      } 
+                      
+                      />
+                      <label className="btn btn-sm btn-outline-secondary" for="btnradio1">Active</label>
+
+                      <input type="radio" className="btn-check" name="active" id="btnradio2" autocomplete="off" value="false" 
+                      onChange={handleRadioChange}
+                      checked={
+                        (() => {
+                            if (firstLoad)
+                              return !users.active ? 'checked' : ''
+                            else 
+                              return !active ? 'checked' : ''
+                        })()
+                      } 
+                      />
+                      <label className="btn btn-sm btn-outline-secondary" for="btnradio2">Inactive</label>
+                    </div>
+                    <div className="mb-3 mt-3">
+                      <button type="submit" className="btn btn-dark float-end" disabled={firstLoad} ><FaSave /> Save</button>
+                    </div>
                   </form>
                 </div>
               </div>

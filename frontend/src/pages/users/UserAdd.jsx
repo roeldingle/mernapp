@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {addUser, reset} from '../../features/users/usersSlice';
 
+import {FaLongArrowAltLeft, FaSave} from'react-icons/fa';
 import Spinner from '../../components/Spinner';
 import Header from '../../components/Header';
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -94,7 +95,7 @@ function UserAdd() {
       <Breadcrumbs page='Add user' items={['Users','Add user']} back={() => navigate('/admin/users')} />
       <div className="container mt-4">
       <div className="mb-4">
-              <button className="btn btn-primary btn-sm" onClick={() => navigate('/admin/users')}>Back to Users</button>
+              <button className="btn btn-dark btn-sm" onClick={() => navigate('/admin/users')}><FaLongArrowAltLeft /> Back to Users</button>
             </div>
             <div className="container mt-4">
               <div className="row">
@@ -155,7 +156,7 @@ function UserAdd() {
                       value={formData.password}
                       />
                     </div>
-                    <button type="submit" className="btn btn-primary float-end">Submit</button>
+                    <button type="submit" className="btn btn-dark float-end"><FaSave /> Save</button>
                   </form>
                 </div>
               </div>
